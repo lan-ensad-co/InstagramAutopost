@@ -10,6 +10,7 @@ fi
 sudo apt install python3 idle3
 sudo apt install python3-pip
 sudo apt install libopenjp2-7 #for Pillow (necessary)
+sudo apt install libtiff5 #for Pillow (necessary)
 
 python3 -m pip install picamera
 python3 -m pip install Pillow
