@@ -1,10 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
 # run this script as sudo 
 # to install all needed libs for igAutoPoster.py
 if [[ "$EUID" != 0 ]]; then
     echo "this script must run as sudo !"
     exit
+fi
 
 sudo apt install python3 idle3
 sudo apt install python3-pip
