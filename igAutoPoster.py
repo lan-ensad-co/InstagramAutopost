@@ -4,7 +4,7 @@
 #to tun the process of taking a picture, generating an emoji caption and posting to instagram
 # >>>>> Olivain.art
 
-import instabot
+from instabot import Bot
 from picamera import PiCamera
 from PIL import Image
 import os
@@ -14,12 +14,15 @@ import random
 import string
 from flask import Flask
 import RPi.GPIO as GPIO
+import shutil
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
-LED = 7 # pin led
-GPIO.setup(LED, GPIO.OUT)
 
+LED = 7 # pin led
+camera = PiCamera()
+
+GPIO.setup(LED, GPIO.OUT)
 app = Flask(__name__) # setup flask app (port 80)
 
 #to generate a new image path
@@ -38,7 +41,10 @@ def genImagePath():
 def takePicture(imgPath):
     #print("taking a picture")
     GPIO.output(LED, GPIO.HIGH)
-    camera = PiCamera()
+    try:
+        shutil.rmtree("config")
+    except:
+        pass
     camera.start_preview()
     #time.sleep(3)
     camera.capture(imgPath)
@@ -66,7 +72,7 @@ def genEmojiCaption():
         rndEmoji = emojis.db.get_emojis_by_tag(random.choice(emojisAllTags))
         for item in rndEmoji:
             fullCaption += item.emoji
-            if(random.random(0,1) > 0):
+            if(random.randint(0,1) > 0):
                 fullCaption+=" "
     return fullCaption
 
@@ -85,13 +91,14 @@ def delPicture(imgPath):
 #to run the full process
 @app.route('/takeapicandpost')
 def fullProcessInstagramAutoPost():
-    user_name = 'igAccount'
+    user_name = 'account'
     password = 'password!'
     img = genImagePath()
     takePicture(img)
     #resizePicture(img,720)
     caption = genEmojiCaption()
     postPicture(user_name, password, img, caption)
+    time.sleep(1)
     delPicture(img)
     return caption
 
