@@ -13,6 +13,12 @@ import emojis
 import random
 import string
 from flask import Flask
+import RPi.GPIO as GPIO
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
+LED = 7 # pin led
+GPIO.setup(LED, GPIO.OUT)
 
 app = Flask(__name__) # setup flask app (port 80)
 
@@ -30,11 +36,13 @@ def genImagePath():
 
 #to take and image from the pi camera
 def takePicture(imgPath):
-    print("taking a picture")
+    #print("taking a picture")
+    GPIO.output(LED, GPIO.HIGH)
     camera = PiCamera()
     camera.start_preview()
     #time.sleep(3)
     camera.capture(imgPath)
+    GPIO.output(LED, GPIO.LOW)
     camera.stop_preview()
 
 #to resize the picture
@@ -77,8 +85,8 @@ def delPicture(imgPath):
 #to run the full process
 @app.route('/takeapicandpost')
 def fullProcessInstagramAutoPost():
-    user_name = 'InstagramAccountUserName'
-    password = 'instagramAccountUserPassword'
+    user_name = 'igAccount'
+    password = 'password!'
     img = genImagePath()
     takePicture(img)
     #resizePicture(img,720)
