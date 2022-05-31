@@ -7,15 +7,8 @@ if [[ "$EUID" != 0 ]]; then
     exit
 fi
 
-sudo apt install python3 idle3
-sudo apt install python3-pip
-sudo apt install libopenjp2-7 #for Pillow (necessary)
-sudo apt install libtiff5 #for Pillow (necessary)
+sudo apt install python3 idle3 python3-pip libopenjp2-7 libtiff5
 
-python3 -m pip install picamera
-python3 -m pip install Pillow
-python3 -m pip install Flask
-python3 -m pip install emojis
-python3 -m pip install instabot
+python3 -m pip install picamera Pillow Flask emojis instabot
 
 echo "lib install done !"
